@@ -66,7 +66,7 @@ async function loadProject() {
 
     for(let s in project.scripts)
     {
-        addFile("projects/scripts/" + currentProjectName + "/" + project.scripts[s]);
+        addFile("projects/scripts/" + currentProjectName + "." + project.scripts[s] + ".js");
     }
 }
 

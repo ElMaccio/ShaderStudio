@@ -1,0 +1,25 @@
+[
+    {
+        "name": "Shader Only",
+        "files": [
+            "default.vert",
+            "default.frag"
+        ]
+    },
+    {
+        "name": "High Level",
+        "files": [
+            "default.vert",
+            "default.frag",
+            "default.high.js"
+        ]
+    },
+    {
+        "name": "Low Level",
+        "files": [
+            "default.vert",
+            "default.frag",
+            "default.low.js"
+        ]
+    }
+]

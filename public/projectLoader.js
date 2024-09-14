@@ -22,4 +22,26 @@ function addProjectButton(name) {
     document.querySelector(".project-list").appendChild(button);
 }
 
+async function loadProjectPresets() {
+    const response = await fetch("/getProjectPresets", {
+        method: "GET"
+    });
+    const presets = await response.json();
+
+    console.log(presets);
+
+    for(let p in presets)
+    {
+        addPresetOption(presets[p].name);
+    }
+}
+
+function addPresetOption(name) {
+    const option = document.createElement('option');
+    option.innerText = name;
+    option.value = name;
+    document.getElementById("projectType").appendChild(option);
+}
+
+loadProjectPresets();
 loadProjects();
