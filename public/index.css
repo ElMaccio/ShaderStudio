@@ -1,0 +1,127 @@
+/* Grid container styling */
+.grid-container {
+    height: 100%;
+    display: grid;
+    row-gap: 20px;
+    grid-template-columns: 1fr 1fr; /* Layout with side panel */
+    grid-template-rows: 1fr 10fr 1fr;
+    grid-template-areas: 
+        "header header"
+        "new load"
+        "footer footer";
+}
+
+/* Canvas container styling */
+.new-container {
+    grid-area: new;
+}
+
+/* Editor container styling */
+.load-container {
+    grid-area: load;
+}
+
+/* Header and footer */
+.header, .footer {
+    background-color: #333;
+    border-bottom: 2px solid #0dddf0; /* Accent color for header/footer border */
+}
+
+/* General styling for the new-container and load-container */
+.new-container, .load-container {
+    background-color: #2e2e2e; /* Lighter dark background */
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    color: #e0e0e0; /* Light text color */
+    margin: 0px 15px;
+}
+
+/* Styling for form elements in new-container */
+.new-container form {
+    display: flex;
+    flex-direction: column;
+}
+
+.new-container label {
+    margin-bottom: 5px;
+}
+
+.new-container input, .new-container select {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #444;
+    border-radius: 4px;
+    background-color: #333; /* Slightly lighter background for form elements */
+    color: #e0e0e0;
+}
+
+.new-container button {
+    align-self: flex-start; /* Align button to the left */
+}
+
+/* Styling for the project list in load-container */
+.project-list {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    max-height: 400px;
+    gap: 10px; /* Space between buttons */
+}
+
+/* Use the previously defined button style */
+.fileBtn {
+    background-color: #3a3a3a;
+    border: 1px solid #555;
+    color: #e0e0e0;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: left;
+    white-space: nowrap;
+    transition: background-color 0.3s ease;
+}
+
+.fileBtn:hover {
+    background-color: #444;
+}
+
+/* Create Project button styling */
+.create-project-button {
+    display: inline-block;
+    padding: 12px 24px; /* Slightly larger padding for emphasis */
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    color: #ffffff; /* White text color for contrast */
+    background-color: #0AB6C5; /* More subdued blue color */
+    border: 2px solid #0AB6C5; /* Border color to match background */
+    border-radius: 6px; /* Slightly rounded corners */
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Hover effect for Create Project button */
+.create-project-button:hover {
+    background-color: #0896A3; /* Darker blue for hover */
+    border-color: #0896A3; /* Border color to match background on hover */
+}
+
+/* Active (pressed) effect for Create Project button */
+.create-project-button:active {
+    background-color: #067781; /* Even darker blue for pressed state */
+    border-color: #067781; /* Border color to match background on press */
+    transform: scale(0.98); /* Slightly shrink the button on press */
+}
+
+/* General reset and styling */
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #1e1e1e; /* Dark background color */
+    color: #e0e0e0; /* Light text color for contrast */
+}

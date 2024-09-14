@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="editor.css">
+    <title>Modify File</title>
+</head>
+<body>
+    <!-- <div style="float: left;">
+        <canvas id="glcanvas" width="640" height="480"></canvas>
+    </div>
+    <div style="float: left;">
+        <div style="margin-left: 10%;">
+            <textarea id="vertText" cols="100" rows="20"></textarea>
+            <button id="saveVertButton" style="float: right;">Save</button>
+        </div>
+        <div style="margin-left: 10%; margin-top: 5%;">
+            <textarea id="fragText" cols="100" rows="20"></textarea>
+            <button id="saveFragButton" style="float: right;">Save</button>
+        </div>
+    </div> -->
+
+    <div class="grid-container">
+        <div class="header">
+            <div class="logo">
+                <a href="/" class="logo-link">ShaderStudio</a>
+            </div>
+            <nav class="header-nav">
+                <a href="/editor" class="nav-button">Editor</a>
+                <a href="/contact" class="nav-button">Contact</a>
+            </nav>
+        </div>
+        <div class="canvas-container">
+            <canvas id="glcanvas" width="800" height="600"></canvas>
+        </div>
+        <div class="editor-container">
+            <div class="editor-grid">
+                <div class="files-container">
+                    <!-- <button class="fileBtn">shader.vert</button> -->
+                </div>
+                <div class="text-editor">
+                    <textarea id="editor"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="side-panel"></div>
+        <div class="footer"></div>
+    </div>
+
+    <!-- Button to toggle side panel -->
+    <button id="toggleButton">&#x25B6;</button>
+
+    <script src="panelToggle.js"></script>
+    <script src="webgl.js"></script>
+    <script src="editor.js"></script>
+</body>
+</html>

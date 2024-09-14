@@ -1,0 +1,11 @@
+[
+    {
+        "name": "shader",
+        "shaders": [
+            "vert", "frag"
+        ],
+        "scripts": [
+
+        ]
+    }
+]

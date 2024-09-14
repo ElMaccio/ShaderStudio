@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="index.css">
+    <title>Modify File</title>
+</head>
+<body>
+    <div class="grid-container">
+        <div class="header">
+            <div class="logo">
+                <a href="/" class="logo-link">ShaderStudio</a>
+            </div>
+            <nav class="header-nav">
+                <a href="/editor" class="nav-button">Editor</a>
+                <a href="/contact" class="nav-button">Contact</a>
+            </nav>
+        </div>
+        <div class="new-container">
+            <h2>Create New Project</h2>
+            <form id="newProjectForm">
+                <label for="projectName">Project Name:</label>
+                <input type="text" id="projectName" name="projectName" required>
+                
+                <label for="projectType">Project Type:</label>
+                <select id="projectType" name="projectType">
+                    <option value="shader-only">Shader Only</option>
+                    <option value="high-level">High Level</option>
+                    <option value="low-level">Low Level</option>
+                </select>
+                
+                <button type="submit" class="create-project-button">Create Project</button>
+            </form>
+        </div>
+        <div class="load-container">
+            <h2>Load Project</h2>
+            <div class="project-list">
+                <!-- Dynamic buttons will be added here -->
+                <!-- <button class="fileBtn">Project 1</button>
+                <button class="fileBtn">Project 2</button>
+                <button class="fileBtn">Project 3</button> -->
+            </div>
+        </div>
+        <div class="footer">
+            <!-- Footer Content -->
+        </div>
+    </div>
+
+    <script src="projectLoader.js"></script>
+</body>
+</html>
