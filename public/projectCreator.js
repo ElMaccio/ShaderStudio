@@ -13,8 +13,6 @@ document.getElementById("newProjectForm").addEventListener('submit', async (e) =
     });
     const projectPreset = await response.json();
 
-    alert(projectName);
-
     response = await fetch('/createProject', {
         method: "POST",
         headers: {
@@ -31,7 +29,11 @@ document.getElementById("newProjectForm").addEventListener('submit', async (e) =
     const message = await response.json();
 
     if(!response.ok)
+        //TODO: Add a better popup
         alert(message.error);
 
     console.log(message);
+
+    clearProjects();
+    loadProjects();
 });

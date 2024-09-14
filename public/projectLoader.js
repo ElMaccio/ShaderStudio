@@ -12,6 +12,9 @@ async function loadProjects() {
 }
 
 function addProjectButton(name) {
+    const buttonParent = document.createElement('div');
+    buttonParent.className = "project-item";
+
     const button = document.createElement('button');
     button.className = "fileBtn";
     button.addEventListener('click', () => {
@@ -19,7 +22,42 @@ function addProjectButton(name) {
     });
     button.textContent = name;
 
-    document.querySelector(".project-list").appendChild(button);
+    const deleteButton = document.createElement('button');
+    deleteButton.className = "deleteBtn";
+    deleteButton.textContent = "✖";
+    deleteButton.addEventListener('click', async () => {
+        await deleteProject(name);
+        clearProjects();
+        await loadProjects();
+    });
+
+    buttonParent.appendChild(button);
+    buttonParent.appendChild(deleteButton);
+
+    document.querySelector(".project-list").appendChild(buttonParent);
+}
+
+async function deleteProject(name) {
+    const response = await fetch('/deleteProject', {
+        method: "DELETE",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            name: name
+        })
+    });
+
+    const responseBody = await response.json();
+
+    if(response.ok)
+        console.log(responseBody. message);
+    else
+        console.log(responseBody.error);
+}
+
+function clearProjects() {
+    document.querySelector(".project-list").innerHTML = "";
 }
 
 async function loadProjectPresets() {

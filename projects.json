@@ -1,1 +1,1 @@
-[{"name":"shader","shaders":["vert","frag"],"scripts":[]}]
+[{"name":"shader","shaders":["vert","frag"],"scripts":[]},{"name":"test","shaders":["vert","frag"],"scripts":["high"]}]

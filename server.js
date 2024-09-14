@@ -32,12 +32,8 @@ const updateFile = (filePath, content) => {
 app.post('/getProject', (req, res) => {
     const name = req.body.name;
 
-    console.log(req.body);
-
     if(!name)
         return res.status(400).json({error: `Project's name is required`});
-
-    console.log(fs.readFileSync(path.join(__dirname, 'projects.json'), 'utf8'));
 
     const data = JSON.parse(fs.readFileSync(path.join(__dirname, 'projects.json'), 'utf8'));
 
@@ -57,14 +53,10 @@ app.post('/createProject', (req, res) => {
     const name = req.body.name;
     const files = req.body.files;
 
-    console.log(req.body);
-
     const data = JSON.parse(fs.readFileSync(path.join(__dirname, 'projects.json'), 'utf8'));
 
     if(data.find(x => x.name ===name))
         return res.status(400).json({error: `This name is already taken`});
-
-    console.log(name);
 
     const project = {
         name: name,
@@ -91,8 +83,6 @@ app.post('/createProject', (req, res) => {
     }
 
     data.push(project);
-
-    console.log(data);
 
     updateFile("projects.json", JSON.stringify(data));
 
@@ -123,9 +113,60 @@ app.get('/getProjectPresets', (req, res) => {
 
 app.post('/update-file', (req, res) => {
     if(updateFile(req.body.path, req.body.content))
-        res.json({ error: 'File uploaded succesfully'});
+        res.json({ message: 'File uploaded succesfully'});
     else
         return res.status(500).json({ error: "Error writing to file" });
+});
+
+app.delete('/deleteProject', (req, res) => {
+    const name = req.body.name;
+
+    if(!name)
+        return res.status(400).json({error: `Project's name is required`});
+
+    const data = JSON.parse(fs.readFileSync(path.join(__dirname, 'projects.json'), 'utf8'));
+
+    const foundIndex = data.findIndex(x => x.name === name);
+
+    if(foundIndex === -1)
+        return res.status(404).json({error: `Project not found`});
+
+    const project = data[foundIndex];
+    data.splice(foundIndex, 1);
+
+    console.log(project);
+
+    for(let s in project.shaders) {
+        const fullFilePath = path.join(__dirname, "public/projects/shaders/" + project.name + "." + project.shaders[s]);
+
+        console.log(fullFilePath);
+
+        fs.unlinkSync(fullFilePath, (err) => {
+            if(err)
+                console.log(err);
+            else
+                console.log("working");
+        });
+    }
+
+    for(let s in project.scripts) {
+        const fullFilePath = path.join(__dirname, "public/projects/scripts/" + project.name + "." + project.scripts[s] + ".js");
+
+        console.log(fullFilePath);
+
+        fs.unlinkSync(fullFilePath, (err) => {
+            if(err)
+                console.log(err);
+            else
+                console.log("working");
+        });
+    }
+
+    //TODO: remove files from the project
+
+    updateFile('projects.json', JSON.stringify(data));
+
+    return res.json({message: "Succesfully deleted project: " + name});
 });
 
 app.listen(PORT, () => {
