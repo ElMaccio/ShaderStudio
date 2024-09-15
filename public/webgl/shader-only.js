@@ -1,7 +1,13 @@
 var canvas = document.getElementById('glcanvas');
 var gl = canvas.getContext('experimental-webgl');
+var shouldRun = true;
 
-var vertices = [-0.5, 0.5, -0.5, -0.5, 0.0, -0.5,];
+var vertices = [
+    // Positions      // UVs
+    -0.5,  0.5,       0.0, 1.0,  // Top-left corner
+    -0.5, -0.5,       0.0, 0.0,  // Bottom-left corner
+     0.0, -0.5,       0.5, 0.0   // Bottom-center corner
+];
 
 async function setupWebGL(shaderProgram)
 {
@@ -10,56 +16,72 @@ async function setupWebGL(shaderProgram)
 
     // Bind an empty array buffer to it
     gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
-
-    // Pass the vertices data to the buffer
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-
-    // Unbind the buffer
-    gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
     gl.useProgram(shaderProgram);
 
-    //Bind vertex buffer object
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
-
     //Get the attribute location
-    var coord = gl.getAttribLocation(shaderProgram, "coordinates");
+    let coord = gl.getAttribLocation(shaderProgram, "coordinates");
 
-    //point an attribute to the currently bound VBO
-    gl.vertexAttribPointer(coord, 2, gl.FLOAT, false, 0, 0);
+    if (coord === -1) {
+        console.error("coordinates attribute not found in the shader");
+    }
 
-    //Enable the attribute
+    //4 is sizeof(float)
+    gl.vertexAttribPointer(coord, 2, gl.FLOAT, false, 4 * 4, 0);
     gl.enableVertexAttribArray(coord);
 
-    /* Step5: Drawing the required object (triangle) */
+    let uv = gl.getAttribLocation(shaderProgram, "uv");
+
+    if (uv === -1) {
+        console.error("uv attribute not found in the shader");
+    }
+
+    gl.vertexAttribPointer(uv, 2, gl.FLOAT, false, 4 * 4, 2 * 4);
+    gl.enableVertexAttribArray(uv);
 
     // Clear the canvas
     gl.clearColor(0.5, 0.5, 0.5, 0.9);
-
-    // Enable the depth test
     gl.enable(gl.DEPTH_TEST); 
-
     // Clear the color buffer bit
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     // Set the view port
     gl.viewport(0,0,canvas.width,canvas.height);
 
-    // Draw the triangle
-    gl.drawArrays(gl.TRIANGLES, 0, 3);
+    shouldRun = true;
+    renderLoop();
 
     return gl;
 }
 
-async function getShaderCode(vertPath, fragPath)
-{
-    const fragCode = await fetch(fragPath).then((response) => response.text()).then((data) => { return data;});
-    const vertCode = await fetch(vertPath).then((response) => response.text()).then((data) => { return data;});
+function renderLoop() {
+    // Clear the canvas for the next frame
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    return [vertCode, fragCode];
+    // Draw the triangle (or other shapes)
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+
+    // Request the next frame
+    if(shouldRun)
+        requestAnimationFrame(renderLoop);
 }
 
-function createShaderProgram(vertCode, fragCode, gl)
+async function getShaderCode(vertPath, fragPath)
+{
+    try {
+        const [vertCode, fragCode] = await Promise.all([
+            fetch(vertPath).then(response => response.ok ? response.text() : Promise.reject(response.statusText)),
+            fetch(fragPath).then(response => response.ok ? response.text() : Promise.reject(response.statusText))
+        ]);
+        return [vertCode, fragCode];
+    } catch (error) {
+        console.error("Error fetching shader code:", error);
+        throw new Error("Shader fetch failed");
+    }
+}
+
+function createShaderProgram(vertCode, fragCode)
 {
     const vertShader = compileShader(vertCode, gl.VERTEX_SHADER, gl);
     const fragShader = compileShader(fragCode, gl.FRAGMENT_SHADER, gl);
@@ -84,7 +106,7 @@ function createShaderProgram(vertCode, fragCode, gl)
     return shaderProgram;
 }
 
-function compileShader(source, type, gl) {
+function compileShader(source, type) {
     const shader = gl.createShader(type);
     gl.shaderSource(shader, source);
     gl.compileShader(shader);
@@ -101,15 +123,19 @@ function compileShader(source, type, gl) {
 async function loadShaderProgram(vertPath, fragPath) {
     const shaders = await getShaderCode(vertPath, fragPath);
     
-    const shaderProgram = createShaderProgram(shaders[0], shaders[1], gl);
+    const shaderProgram = createShaderProgram(shaders[0], shaders[1]);
 
     return shaderProgram
 }
 
-async function refreshShaders(vertPath, fragPath) {
-    const shaderProgram = await loadShaderProgram(vertPath, fragPath);
+async function start(projectName) {
+    const shaderProgram = await loadShaderProgram("projects/shaders/" + projectName + ".vert", "projects/shaders/" + projectName + ".frag");
 
     setupWebGL(shaderProgram);
 }
 
-refreshShaders("projects/shaders/shader.vert", "projects/shaders/shader.frag");
+function stop() {
+    shouldRun = false;
+}
+
+console.log("loaded");

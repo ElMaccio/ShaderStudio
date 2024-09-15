@@ -162,8 +162,6 @@ app.delete('/deleteProject', (req, res) => {
         });
     }
 
-    //TODO: remove files from the project
-
     updateFile('projects.json', JSON.stringify(data));
 
     return res.json({message: "Succesfully deleted project: " + name});
