@@ -167,6 +167,8 @@ app.delete('/deleteProject', (req, res) => {
     return res.json({message: "Succesfully deleted project: " + name});
 });
 
+
+
 app.listen(PORT, () => {
     console.log(`Server running on PORT ${PORT}`);
 });
